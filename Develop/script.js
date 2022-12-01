@@ -1,90 +1,83 @@
-// create variables to hold the character options for special, lowercase, uppercase, and numeric characters.
 
 var generateBtn = document.querySelector("#generate");
+generateBtn.addEventListener("click", writePassword);
+
+
 var lowerArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 var upperArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 var numberArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-var symbolArray = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+var symbolArray = ['!', '#', '$', '%', '&', '(',')', '*', '+']
 
 
-// create an empty array that will hold the users selected characters.
-
-var possibleChars = []
-var passwordArray = []
-
-// on game start prompt for users number of characters and hold in variable.
 
 function generatePassword() {
 
-var numChars = prompt("How many characters would you like in your password?")
+var possibleChars = [];
+  
+var numChars = prompt("How many characters would you like in your password (Must be a number between 8-128)?");
 
 
-// check the users input and confirm they put in a number between 8 - 128
-// write function that validates user input and that is it numeric
 
- function validateUserInput(chars) {
-   if (chars < 8 || chars > 128) {
-   return null
-   }
- }
+if (isNumeric(numChars) === false || validatePassLength(numChars) === false) {
+  alert("Must enter a number between 8-128");
+  return generatePassword();
+}
 
-//after validation create variables for character selections
+var symbolChars = confirm("Would you like to use symbols in your password?");
+var numberChars = confirm("Would you like to use numbers in your password?");
+var lowerChars = confirm("Would you like to use lowercase letters in your password?");
+var upperChars = confirm("Would you like to use uppercase letters in your password?");
 
-var symbolChars = confirm("Would you like to use symbols in your password?")
-var numberChars = confirm("Would you like to use numbers in your password?")
-var lowerChars = confirm("Would you like to use lowercase letters in your password?")
-var upperChars = confirm("Would you like to use uppercase letters in your password?")
-
-// validate that at least one option was selected
 
 if (!symbolChars && !numberChars && !lowerChars && !upperChars) {
- alert("You need to select at least one type of character!")
- return generatePassword()
+ alert("You need to select at least one type of character!");
+ return generatePassword();
 }
 
-// after validation is complete start pushing the selected characters into the possibleChars array
 
 if (symbolChars) {
- possibleChars.concat(symbolArray)
+  possibleChars = possibleChars.concat(symbolArray);
 }
+
 if (numberChars) {
- possibleChars.concat(numberArray)
+ possibleChars= possibleChars.concat(numberArray);
 }
+
 if (lowerChars) {
- possibleChars.concat(upperArray)
+ possibleChars = possibleChars.concat(lowerArray);
 }
+
 if (upperChars) {
- possibleChars.concat(upperArray)
+ possibleChars = possibleChars.concat(upperArray);
 }
 
-var randomNum = [Math.floor(Math.random() * possibleChars.length)]
 
+var passwordArray = [];
 
-
-// loop through possibleChars select random characters from possibleChars array based on how many characters they selected from the prompt
-
-for (let i = 0; i < possibleChars.length; i++) {
+for (let i = 0; i < numChars ; i++) {
+  var randomNum = [Math.floor(Math.random() * possibleChars.length)];
   const selectedChar = possibleChars[randomNum];
   passwordArray.push(selectedChar)
 }
-
-
+  return passwordArray.join('');
 }
 
-generatePassword()
 
 
-// push the randomly generated character to an empty array called passwordArray
+function isNumeric(num){
+  return !isNaN(num)
+}
 
 
-//return passwordArray.join()
+function validatePassLength(chars) {
+  var intChars = parseInt(chars);
+  if (intChars < 8 || intChars > 128) {
+  return false;
+  }
 
+  return true;
 
-// Assignment Code
-
-
-
-// Write password to the #password input
+}
 
 
 function writePassword() {
@@ -93,8 +86,4 @@ function writePassword() {
 
   passwordText.value = password;
 }
-
-// Add event listener to generate button
-
-generateBtn.addEventListener("click", writePassword);
 
